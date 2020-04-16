@@ -106,7 +106,16 @@ function calculateMaxPrequalificationScore(fixedtable,quality,time,cost){
         result = result + (fixedtable[0][j]*fixedtable[2][j]*time)
         result = result + (fixedtable[0][j]*fixedtable[3][j]*cost)
     }
-    return result;
+    return result.toFixed(2);
+}
+function getPrequalificationScore(fixedtable,quality,time,cost,selectionCriteriaValues){
+    var result = 0;
+    for(var j=0;j<13;j++){
+        result = result + (fixedtable[0][j]*fixedtable[1][j]*quality*selectionCriteriaValues[j]);
+        result = result + (fixedtable[0][j]*fixedtable[2][j]*time*selectionCriteriaValues[j]);
+        result = result + (fixedtable[0][j]*fixedtable[3][j]*cost*selectionCriteriaValues[j]);
+    }
+    return result.toFixed(2);
 }
 
 $(document).ready(function () {
@@ -114,9 +123,10 @@ $(document).ready(function () {
     var fixedtable = fixeddata();
     var selectioncriteras = selectioncriterasarray();
 
-    var numofhouses = $('#numofoffices');
+    var numofoffices = $('#numofoffices');
     var div1 = $('.consultantnames');
     var div2 = $('.selectioncriteria');
+    var div3 = $('.output');
 
     var MaxPrequalificationScore;
 
@@ -124,7 +134,7 @@ $(document).ready(function () {
 
     $('#numofoffices').change(function () {
         $('.constraints').show();
-        var cnt = numofhouses.val();
+        var cnt = numofoffices.val();
 
         div1.empty();
         for (var i = 1; i <= cnt; i++)
@@ -134,7 +144,7 @@ $(document).ready(function () {
     });
 
     $('.consultantnames').change(function () {
-        var cnt = numofhouses.val();
+        var cnt = numofoffices.val();
         changeselectioncriterainputs(div2,cnt,selectioncriteras);
     });
 
@@ -145,6 +155,36 @@ $(document).ready(function () {
         if(quality!='' && time!='' && cost!=''){
             MaxPrequalificationScore = calculateMaxPrequalificationScore(fixedtable,quality,time,cost);
         }
+    });
+
+
+    $('#submit').click(function(){
+        var cnt = numofoffices.val();
+        var PrequalificationScore = new Array(cnt);
+        var quality = $('#Quality').val();
+        var time = $('#Time').val();
+        var cost = $('#Cost').val();
+
+        if(quality!='' && time!='' && cost!=''){
+            for(var i=1;i<=cnt;i++){
+                var selectionCriteriaValues = new Array(13);
+                for(var j=1;j<=13;j++){
+                    selectionCriteriaValues[j-1] = $('#value'+j+i).val();
+                }
+                PrequalificationScore[i-1] = [getPrequalificationScore(fixedtable,quality,time,cost,selectionCriteriaValues),i-1]; 
+            }
+        }
+        PrequalificationScore.sort((a,b)=>b[0]-a[0]);
+
+        div3.empty();
+        div3.append($('<table> <tr> <th>Rank</th> <th>Consultant</th> <th>PS</th> <th>CPI</th></tr>'));
+        for(var i=1;i<=cnt;i++){
+            var y = PrequalificationScore[i-1][1]+1;
+            var x = $('#consultant' + y).val()
+            div3.append($('<tr> <td>'+i+'</td> <td>'+x+'</td> <td>'+PrequalificationScore[i-1][0]+'</td> <td>'+PrequalificationScore[i-1][0]/MaxPrequalificationScore+'</td> </tr>'))
+        }
+        div3.append($('<tr><td></td><td>Max PS</td><td>'+MaxPrequalificationScore+'</td><td></td></tr></table>'))
+
     });
 
 });
