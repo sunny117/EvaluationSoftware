@@ -6,6 +6,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script type="text/javascript" src="jquery-3.4.1.min.js"></script>
         <script type="text/javascript" src="index.js"></script>
+        <link rel="stylesheet" href="index.css">
+        <h1>OFFICE EVALUATION</h1>
     </head>
     <body>
         <div>
@@ -16,17 +18,47 @@
         <div class="consultantnames"></div>
         
         <div class="constraints">
+            <div style="display: inline-block;"
             <label for="Quality">Please, input the importance rate of Quality Constraints:</label>
             <input type="text" id="Quality" name="Quality"><br><br>    
             <label for="Time">Please, input the importance rate of Time Constraints:</label>
             <input type="text" id="Time" name="Time"><br><br>    
             <label for="Cost">Please, input the importance rate of Cost Constraints:</label>
             <input type="text" id="Cost" name="Cost"><br><br>
+            </div>
+            <div style="display: inline-block;">
+                <table>
+                    <tr>
+                        <td>0</td>
+                        <td>Without Importance</td>
+                    </tr>
+                    <tr>
+                        <td>0.2</td>
+                        <td>Lowest Importance</td>
+                    </tr>
+                    <tr>
+                        <td>0.4</td>
+                        <td>Low Importance</td>
+                    </tr>
+                    <tr>
+                        <td>0.6</td>
+                        <td>Medium Importance</td>
+                    </tr>
+                    <tr>
+                        <td>0.8</td>
+                        <td>High Importance</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Highest Importance</td>
+                    </tr>
+                </table>
+            </div>
         </div>
 
         <div class="selectioncriteria"></div>
-
-        <div class="output"></div><br><br>
+        <br><br>
+        <div class="output"></div>
 
         <button id='submit'>Submit</button>
        

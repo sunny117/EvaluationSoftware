@@ -85,19 +85,20 @@ function selectioncriterasarray() {
 }
 function changeselectioncriterainputs(div2,cnt,selectioncriteras) {
     div2.empty();
-    div2.append($('<table> <tr> <th>Selection Criteria</th>'));
+    var x = '<table> <tr> <th>Selection Criteria</th>'
     for (var i = 1; i <= cnt; i++) {
-        div2.append('<th>' + $('#consultant' + i).val() + '</th>')
+        x+='<th>' + $('#consultant' + i).val() + '</th>'
     }
-    div2.append('</tr>')
+    x+='</tr>'
     for (var i = 1; i <= 13; i++) {
-        div2.append('<tr><td>' + selectioncriteras[i - 1] + '</td>')
+        x+='<tr><td>' + selectioncriteras[i - 1] + '</td>'
         for (var j = 1; j <= cnt; j++) {
-            div2.append('<td><input type="text" id="value' + i + j + '"></td>')
+            x+='<td><input type="text" id="value' + i + j + '"></td>'
         }
-        div2.append('</tr>')
+        x+='</tr>'
     }
-    div2.append('</table>')
+    x+='</table>'
+    div2.html(x);
 }
 function calculateMaxPrequalificationScore(fixedtable,quality,time,cost){
     var result = 0;
@@ -173,18 +174,19 @@ $(document).ready(function () {
                 }
                 PrequalificationScore[i-1] = [getPrequalificationScore(fixedtable,quality,time,cost,selectionCriteriaValues),i-1]; 
             }
-        }
-        PrequalificationScore.sort((a,b)=>b[0]-a[0]);
+        
+            PrequalificationScore.sort((a,b)=>b[0]-a[0]);
 
-        div3.empty();
-        div3.append($('<table> <tr> <th>Rank</th> <th>Consultant</th> <th>PS</th> <th>CPI</th></tr>'));
-        for(var i=1;i<=cnt;i++){
-            var y = PrequalificationScore[i-1][1]+1;
-            var x = $('#consultant' + y).val()
-            div3.append($('<tr> <td>'+i+'</td> <td>'+x+'</td> <td>'+PrequalificationScore[i-1][0]+'</td> <td>'+PrequalificationScore[i-1][0]/MaxPrequalificationScore+'</td> </tr>'))
+            div3.empty();
+            var p = '<table> <tr> <th>Rank</th> <th>Consultant</th> <th>PS</th> <th>CPI</th></tr>';
+            for(var i=1;i<=cnt;i++){
+                var y = PrequalificationScore[i-1][1]+1;
+                var x = $('#consultant' + y).val()
+                p+='<tr> <td>'+i+'</td> <td>'+x+'</td> <td>'+PrequalificationScore[i-1][0]+'</td> <td>'+(PrequalificationScore[i-1][0]/MaxPrequalificationScore).toFixed(2)+'</td> </tr>'
+            }
+            p+='<tr><td></td><td>Max PS</td><td>'+MaxPrequalificationScore+'</td><td></td></tr></table>'
+            div3.html(p);
         }
-        div3.append($('<tr><td></td><td>Max PS</td><td>'+MaxPrequalificationScore+'</td><td></td></tr></table>'))
-
     });
 
 });
