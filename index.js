@@ -99,6 +99,15 @@ function changeselectioncriterainputs(div2,cnt,selectioncriteras) {
     }
     div2.append('</table>')
 }
+function calculateMaxPrequalificationScore(fixedtable,quality,time,cost){
+    var result = 0;
+    for(var j=0;j<13;j++){
+        result = result + (fixedtable[0][j]*fixedtable[1][j]*quality)
+        result = result + (fixedtable[0][j]*fixedtable[2][j]*time)
+        result = result + (fixedtable[0][j]*fixedtable[3][j]*cost)
+    }
+    return result;
+}
 
 $(document).ready(function () {
 
@@ -108,6 +117,8 @@ $(document).ready(function () {
     var numofhouses = $('#numofoffices');
     var div1 = $('.consultantnames');
     var div2 = $('.selectioncriteria');
+
+    var MaxPrequalificationScore;
 
     $('.constraints').hide();
 
@@ -125,6 +136,15 @@ $(document).ready(function () {
     $('.consultantnames').change(function () {
         var cnt = numofhouses.val();
         changeselectioncriterainputs(div2,cnt,selectioncriteras);
+    });
+
+    $('.constraints').change(function(){
+        var quality = $('#Quality').val();
+        var time = $('#Time').val();
+        var cost = $('#Cost').val();
+        if(quality!='' && time!='' && cost!=''){
+            MaxPrequalificationScore = calculateMaxPrequalificationScore(fixedtable,quality,time,cost);
+        }
     });
 
 });
